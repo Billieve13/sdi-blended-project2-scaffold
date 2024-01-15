@@ -18,7 +18,7 @@ const MapSnapshot = ({ lat, lng }) => {
         <View>
           <Image name="image" value="$image"/>
           <PolygonLabels name="label" toName="image">
-            <Label value="Object" background="green"/>
+            <Label value="" background="green"/>
           </PolygonLabels>
         </View>
       `,
@@ -85,11 +85,11 @@ export default MapSnapshot;
 
 // const MapSnapshot = ({ lat, lng}) => {
 //   const mapImageUrl = getMapSnapshotUrl(lat, lng, 18);
-  
+
 //   const onSelect = selectedId => console.log(selectedId);
 //   const onChange = data => console.log(data);
 
-  
+
 
 //   return (
 //   <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
@@ -100,11 +100,11 @@ export default MapSnapshot;
 //         onChange={onChange}
 //         width={640}
 //         height={600}
-        
+
 //         style= {{objectFit: 'contain'}}
 //       />
 //     </div>
-    
+
 //   </div>
 // );
 
