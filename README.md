@@ -1,32 +1,82 @@
-# Project 2 Scaffold
+# Data Annotation Project
 
-We have created a basic scaffold for you to start working on right away.
+## Example Video
 
-Fork this scaffold repository in Github and clone it locally onto your machine. 
-
-Once cloned: 
-* open this repo with VSCode
-* run `npm install` to install all necessary dependencies
-* run `npm start` to start up the application 
+[readme-video02.webm](https://github.com/cwilliams001/sdi-blended-project2-scaffold/assets/82992893/b461f059-734d-4acf-824b-5a734e6f7e4e)
 
 
-We have already set up the project with *React Testing Library*. 
-We have also created some sample tests, so you can practice the Red-Green-Refactor strategy right away. 
 
-## React Testing Library test
+## Overview
+This project integrates Label Studio into a React application for annotation purposes. It allows users to annotate images using Label Studio and then sends these annotations to a Node.js backend server. The server stores the annotations and provides an endpoint to view all received annotations.
 
-To run React Testing Library in this project, you just need to enter `$ npm run test` in the command line within the project.
+## Prerequisites
+- Node.js
+- npm (Node Package Manager)
+- React.js
 
-Go ahead and remove from your `src/App.js` file the code that looks similar to this: `<h1>Project 2</h1>`.
+## Installation
 
-Now run `$ npm run test` in your command line again. 
+### Frontend
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   ```
 
-Does the test fail? If it does, your RTL test is working. 
+2. **Navigate to the frontend directory:**
+   ```bash
+   cd sdi-blended-project2-scaffold
+   ```
 
-You can make it pass again by returning the heading back into the code. 
+3. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
+4. **Set up environment variables:**
+   - Create a `.env` file in the root of the frontend directory.
+   - Add your Google API Key for map snapshots:
+     ```env
+     REACT_APP_GOOGLE_API_KEY=your_google_api_key
+     ```
 
-- - - 
+### Backend
+1. **Navigate to the backend directory:**
+   ```bash
+   cd backend
+   ```
 
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-> **_NOTE:_** You will not need these two particular tests for successfully completing Project 2 - they are only meant as examples of the setup for testing with RTL. Once you have observed them, feel free to remove them along with the `<h1>Project 2</h1>` heading from your code.   
+## Running the Application
+
+### Start the Backend Server
+1. **Navigate to the backend directory:**
+   ```bash
+   cd backend
+   ```
+
+2. **Start the server:**
+   ```bash
+   node server.js
+   ```
+
+### Start the Frontend Application
+1. **Open a new terminal window/tab.**
+2. **Navigate to the frontend directory:**
+   ```bash
+   cd sdi-blended-project2-scaffold
+   ```
+
+3. **Start the React application:**
+   ```bash
+   npm start
+   ```
+
+### Usage
+- Open your web browser and navigate to `http://localhost:3000`.
+- Use the Label Studio interface to annotate images.
+- Submit your annotations, which will be sent to the backend server.
+- To view received annotations, navigate to `http://localhost:3001/annotations` in your browser.

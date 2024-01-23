@@ -1,41 +1,39 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import LabelStudio from 'label-studio';
 import 'label-studio/build/static/css/main.css';
-//import HomePage from './Home';
 
-const getMapSnapshotUrl = (lat, lng, zoom = 18, size = '640x600', type = 'hybrid') => {
+const getMapSnapshotUrl = (lat, lng, zoom = 17, scale=4, size = '940x900', type = 'hybrid') => {
   const apiKey = process.env.REACT_APP_GOOGLE_API_KEY;
-  return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${size}&maptype=${type}&key=${apiKey}`;
+  return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&scale=${scale}&size=${size}&maptype=${type}&key=${apiKey}`;
 };
 
 const MapSnapshot = () => {
   const [latitude, setLatitude] = useState(45.11384566935438);
   const [longitude, setLongitude] = useState(42.1186446113149);
-  const [showMap, setShowMap] = useState(true);
-  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [labelType, setLabelType] = useState('PolygonLabels');
+  //const [showMap, setShowMap] = useState(true);
+  //const [formSubmitted, setFormSubmitted] = useState(false);
   const labelStudioContainerRef = useRef();
 
   useEffect(() => {
-    if (labelStudioContainerRef.current || formSubmitted) {
+    if (labelStudioContainerRef.current) {
       initializeLabelStudio();
     }
-  }, [latitude, longitude, formSubmitted]); // Reinitialize when lat or lng changes
+  }, [labelType]); // Reinitialize when labelType changes
 
   const handleLatitudeChange = (event) => {
     setLatitude(Number(event.target.value));
-    setShowMap(true);
+
   };
 
   const handleLongitudeChange = (event) => {
     setLongitude(Number(event.target.value));
-    setShowMap(true);
+
   };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    setShowMap(true);
-    setFormSubmitted(true);
+    initializeLabelStudio();
   };
 
 const initializeLabelStudio = () => {
@@ -43,11 +41,15 @@ const initializeLabelStudio = () => {
   const mapImageUrl = getMapSnapshotUrl(latitude, longitude);
   const labelStudioConfig = {
     config: `<View>
-  <Image name="image" value="$image" />
-  <PolygonLabels name="labels" toName="image">
+  <Image name="image" value="$image" zoomControl="true"/>
+  <${labelType} name="labels" toName="image">
     <Label value="Tank" />
+    <Label value="Truck" />
+    <Label value="Airplane" />
+    <Label value="Helicopter" />
+    <Label value="Person" />
     <Label value="Trench" />
-  </PolygonLabels>
+  </${labelType}>
     </View>`,
     interfaces: [
       "panel",
@@ -104,94 +106,61 @@ new LabelStudio(labelStudioContainerRef.current.id, labelStudioConfig);
 };
 
 return (
-  <div>
-    <form onSubmit={handleFormSubmit}>
-      <div>
-        <label>
-          Latitude:
+   <div style={{ margin: '0 auto', maxWidth: '1024px', padding: '1em' }}>
+      <form onSubmit={handleFormSubmit} style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '20px',
+        background: '#f3f3f3',
+        padding: '10px',
+        borderRadius: '5px',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, .1)'
+      }}>
+        <div style={{ marginRight: '10px' }}>
+          <label htmlFor="latitude" style={{ marginRight: '5px' }}>Latitude:</label>
           <input
+            id="latitude"
             type="number"
             value={latitude}
             onChange={handleLatitudeChange}
-            disabled={showMap}
+            style={{ padding: '5px', border: '1px solid #ccc', borderRadius: '4px' }}
           />
-        </label>
-      </div>
-      <div>
-        <label>
-          Longitude:
+        </div>
+        <div style={{ marginRight: '10px' }}>
+          <label htmlFor="longitude" style={{ marginRight: '5px' }}>Longitude:</label>
           <input
+            id="longitude"
             type="number"
             value={longitude}
             onChange={handleLongitudeChange}
-            disabled={showMap}
-          />
-        </label>
-      </div>
-      <button type="submit">Show Map</button>
-    </form>
-    {showMap && (
-        <div>
-          <img
-            src={getMapSnapshotUrl(latitude, longitude)}
-            alt="Map Snapshot"
-            style={{ size: '640x400' }}
+            style={{ padding: '5px', border: '1px solid #ccc', borderRadius: '4px' }}
           />
         </div>
-      )}
-    <div ref={labelStudioContainerRef} id="label-studio" style={{ width: '100%', height: '400px' }}></div>
-  </div>
+        <div>
+          <label htmlFor="labelType" style={{ marginRight: '5px' }}>Label Type:</label>
+          <select
+            id="labelType"
+            value={labelType}
+            onChange={(e) => setLabelType(e.target.value)}
+            style={{ padding: '5px', border: '1px solid #ccc', borderRadius: '4px' }}
+          >
+            <option value="PolygonLabels">Polygon Labels</option>
+            <option value="RectangleLabels">Rectangle Labels</option>
+          </select>
+        </div>
+        <button type="submit" style={{
+          padding: '5px 15px',
+          border: 'none',
+          borderRadius: '4px',
+          background: '#007bff',
+          color: '#fff',
+          cursor: 'pointer'
+        }}>Show Map</button>
+      </form>
+      <div ref={labelStudioContainerRef} id="label-studio" style={{ width: '100%', height: '400px' }}></div>
+    </div>
 );
 };
 
 export default MapSnapshot;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React from 'react';
-// import { ReactPictureAnnotation } from 'react-picture-annotation';
-
-// const getMapSnapshotUrl = (lat, lng, zoom = 18, size = '640x600', type = 'hybrid') => {
-//   const apiKey = process.env.REACT_APP_GOOGLE_API_KEY; // Replace with your API key
-//   return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${size}&maptype=${type}&key=${apiKey}`;
-// };
-
-// const MapSnapshot = ({ lat, lng}) => {
-//   const mapImageUrl = getMapSnapshotUrl(lat, lng, 18);
-
-//   const onSelect = selectedId => console.log(selectedId);
-//   const onChange = data => console.log(data);
-
-
-
-//   return (
-//   <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-//     <div style={{ flexGrow: 0}}>
-//       <ReactPictureAnnotation
-//         image={mapImageUrl}
-//         onSelect={onSelect}
-//         onChange={onChange}
-//         width={640}
-//         height={600}
-
-//         style= {{objectFit: 'contain'}}
-//       />
-//     </div>
-
-//   </div>
-// );
-
-// };
-
-// export default MapSnapshot;
